@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  h1 Balls
+  p.lead I like your balls
+
+  if fire_fighter
+    h2 #{fire_fighter.rank}
+  else
+    h2 ah ma gad

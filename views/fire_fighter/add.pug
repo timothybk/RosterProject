@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  h1 Add
+  p.lead I like to add
+
+  form(action='/firefighter/addPost', method='POST')
+    .form-group
+      label(for='rank') Rank
+      input#rank.form-control(type='text', placeholder='Rank', name='rank')
+    button.btn.btn-default(type='submit') Submit
