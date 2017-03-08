@@ -23,7 +23,7 @@ const fireFighterSchema = new mongoose.Schema({
       rescuePumpDriverCount: Number
     },
     rescueCounts: {
-      RescuePumpOneCount: Number,
+      rescuePumpOneCount: Number,
       rescuePumpTwoCount: Number,
       salvageDriverCount: Number,
       salvageOffsiderCount: Number

@@ -26,10 +26,11 @@ exports.scorecard = (req, res, next) => {
       return next(err);
     }
     if (fire_fighter) {
+      const fire_fighterObject = fire_fighter.toObject();
       req.flash('success', { msg: 'Found one fuckers' });
-      res.render('scorecard', {
+      res.render('fire_fighter/scorecard', {
         title: 'Scorecard of amazing',
-        fire_fighter: fire_fighter
+        fire_fighter: fire_fighterObject
       });
     }
     else
@@ -61,14 +62,43 @@ exports.add = (req, res, next) => {
  * Add
  */
 exports.addPost = (req, res, next) => {
-
+  
   const fire_fighter = new FireFighter({
-    number: 124,
-    rank: req.body.rank
+    number: req.body.number,
+    rank: req.body.rank,
+    name: req.body.name,
+    md: req.body.md,
+    rescue: req.body.rescue,
+    aerial: req.body.aerial,
+    genDutyCounts: {
+      flyerOneCount: req.body.flyerOneCount,
+      flyerTwoCount: req.body.flyerTwoCount,
+      flyerThreeCount: req.body.flyerThreeCount,
+      runnerOneCount: req.body.runnerOneCount,
+      runnerTwoCount: req.body.runnerTwoCount,
+      runnerThreeCount: req.body.runnerThreeCount,
+      rescuePumpThreeCount: req.body.rescuePumpThreeCount,
+      spareCount: req.body.spareCount
+    },
+    driverCounts: {
+      flyerDriverCount: req.body.flyerDriverCount,
+      runnerDriverCount: req.body.runnerDriverCount,
+      rescuePumpDriverCount: req.body.rescuePumpDriverCount
+    },
+    rescueCounts: {
+      rescuePumpOneCount: req.body.rescuePumpOneCount,
+      rescuePumpTwoCount: req.body.rescuePumpTwoCount,
+      salvageDriverCount: req.body.salvageDriverCount,
+      salvageOffsiderCount: req.body.salvageOffsiderCount
+    },
+    brontoCounts: {
+      brontoDriverCount: req.body.brontoDriverCount,
+      brontoOffsiderCount: req.body.brontoOffsiderCount
+    }
   });
   fire_fighter.save((err) => {
     if (err) {
-      console.log('balls error');
+      console.log(err);
       return next(err);
     }
 

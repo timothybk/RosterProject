@@ -1,10 +1,18 @@
 extends ../layout
 
 block content
-  h1 Balls
-  p.lead I like your balls
+  h1 #{fire_fighter.name}
+  p.lead #{fire_fighter.number}, #{fire_fighter.rank}
 
   if fire_fighter
-    h2 #{fire_fighter.rank}
+    .list-group
+      each val, index in fire_fighter.driverCounts
+        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
+    .list-group
+      each val, index in fire_fighter.rescueCounts
+        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
+    .list-group
+      each val, index in fire_fighter.brontoCounts
+        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
   else
     h2 ah ma gad

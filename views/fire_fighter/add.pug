@@ -9,7 +9,7 @@ block content
 				input#name.form-control(type='text', placeholder='Name', name='name')
 		.form-group
 			label(for='number') Number
-				input#number.form-control(type='text', placeholder='number', name='number')
+				input#number.form-control(type='text', placeholder='Number', name='number')
 		.form-group
 			label(for='rank') Rank
 				select#rank.form-control(name='rank')
@@ -22,24 +22,79 @@ block content
 			legend Tick all that apply
 			.form-check
 				label.form-check-label
-					input#mdChkBox.form-check-input(type='checkbox', name='md')
+					input(type='hidden', name='md' value='false')
+					input#mdChkBox.form-check-input(type='checkbox', name='md' value="true")
 					| Motor Driver
 			.form-check
 				label.form-check-label
-					input#rescueChkBox.form-check-input(type='checkbox', name='rescue')
+					input(type='hidden', name='rescue' value='false')
+					input#rescueChkBox.form-check-input(type='checkbox', name='rescue' value="true")
 					| Rescue
 			.form-check
 				label.form-check-label
-					input#aerialChkBox.form-check-input(type='checkbox', name='aerial')
+					input(type='hidden', name='aerial' value='false')
+					input#aerialChkBox.form-check-input(type='checkbox', name='aerial' value="true")
 					| Aerial
+		legend General Counts
 		.row
 			.col-sm-4.form-group
-				label(for='flyer1count') Flyer 1 count
-					input#flyer1count.form-control(type='text', name='flyer1count')
+				label(for='flyerOneCount') Flyer One Count
+					input#flyerOneCount.form-control(type='text', name='flyerOneCount')
 			.col-sm-4.form-group
-				label(for='flyer2count') Flyer 2 count
-					input#flyer2count.form-control(type='text', name='flyer2count')
+				label(for='flyerTwoCount') Flyer Two Count
+					input#flyerTwoCount.form-control(type='text', name='flyerTwoCount')
 			.col-sm-4.form-group
-				label(for='flyer3count') Flyer 3 count
-					input#flyer3count.form-control(type='text', name='flyer3count')
+				label(for='flyerThreeCount') Flyer Three Count
+					input#flyerThreeCount.form-control(type='text', name='flyerThreeCount')
+		.row
+			.col-sm-4.form-group
+				label(for='runnerOneCount') Runner One Count
+					input#runnerOneCount.form-control(type='text', name='runnerOneCount')
+			.col-sm-4.form-group
+				label(for='runnerTwoCount') Runner Two Count
+					input#runnerTwoCount.form-control(type='text', name='runnerTwoCount')
+			.col-sm-4.form-group
+				label(for='runnerThreeCount') Runner Two Count
+					input#runnerThreeCount.form-control(type='text', name='runnerThreeCount')
+		.row
+			.col-sm-4.form-group
+				label(for='rescuePumpThreeCount') Rescue Pump Three Count
+					input#rescuePumpThreeCount.form-control(type='text', name='rescuePumpThreeCount')
+			.col-sm-4.form-group
+				label(for='spareCount') Spare Count
+					input#spareCount.form-control(type='text', name='spareCount')
+		legend Driver Counts
+		.row
+			.col-sm-4.form-group
+				label(for='flyerDriverCount') Flyer driver Count
+					input#flyerDriverCount.form-control(type='text', name='flyerDriverCount')
+			.col-sm-4.form-group
+				label(for='runnerDriverCount') Runner driver Count
+					input#runnerDriverCount.form-control(type='text', name='runnerDriverCount')
+			.col-sm-4.form-group
+				label(for='rescuePumpDriverCount') Rescue pump Driver Count
+					input#runnerThreeCount.form-control(type='text', name='rescuePumpDriverCount')
+		legend Rescue Counts
+		.row
+			.col-sm-3.form-group
+				label(for='rescuePumpOneCount') Rescue Pump One Count
+					input#rescuePumpOneCount.form-control(type='text', name='rescuePumpOneCount')
+			.col-sm-3.form-group
+				label(for='rescuePumpTwoCount') Rescue Pump Two Count
+					input#rescuePumpTwoCount.form-control(type='text', name='rescuePumpTwoCount')
+			.col-sm-3.form-group
+				label(for='salvageDriverCount') Salvage Driver Count
+					input#salvageDriverCount.form-control(type='text', name='salvageDriverCount')
+			.col-sm-3.form-group
+				label(for='salvageOffsiderCount') Salvage Offsider Count
+					input#salvageOffsiderCount.form-control(type='text', name='salvageOffsiderCount')
+		legend Aerial Counts
+		.row
+			.col-sm-3.form-group
+				label(for='brontoDriverCount') Bronto Driver Count
+					input#brontoDriverCount.form-control(type='text', name='brontoDriverCount')
+			.col-sm-3.form-group
+				label(for='brontoOffsiderCount') Bronto Offsider Count
+					input#brontoOffsiderCount.form-control(type='text', name='brontoOffsiderCount')
+		input(type='hidden', name='_csrf', value=_csrf)
 		button.btn.btn-default(type='submit') Submit
