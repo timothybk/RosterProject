@@ -11,7 +11,7 @@ const fireFighterSchema = new mongoose.Schema({
       flyerOneCount: Number,
       flyerTwoCount: Number,
       flyThreeCount: Number,
-      runnerThreeCount: Number,
+      runneroneCount: Number,
       runnerTwoCount: Number,
       runnerThreeCount: Number,
       rescuePumpThreeCount: Number,

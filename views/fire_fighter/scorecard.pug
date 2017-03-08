@@ -6,13 +6,21 @@ block content
 
   if fire_fighter
     .list-group
+      each val, index in fire_fighter.genDutyCounts
+        - var indexString = index.charAt(0).toUpperCase() + index.slice(1)
+        - var splitname = indexString.split(/(?=[A-Z])/)
+        a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{val}
       each val, index in fire_fighter.driverCounts
-        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
-    .list-group
+        - var indexString = index.charAt(0).toUpperCase() + index.slice(1)
+        - var splitname = indexString.split(/(?=[A-Z])/)
+        a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{val}
       each val, index in fire_fighter.rescueCounts
-        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
-    .list-group
+        - var indexString = index.charAt(0).toUpperCase() + index.slice(1)
+        - var splitname = indexString.split(/(?=[A-Z])/)
+        a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{val}
       each val, index in fire_fighter.brontoCounts
-        a(href="#").list-group-item.list-group-item-action #{index} : #{val}
+        - var indexString = index.charAt(0).toUpperCase() + index.slice(1)
+        - var splitname = indexString.split(/(?=[A-Z])/)
+        a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{val}
   else
     h2 ah ma gad
