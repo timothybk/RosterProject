@@ -1,11 +1,45 @@
 extends ../layout
 
 block content
-  h1 Add
-  p.lead I like to add
-
-  form(action='/firefighter/addPost', method='POST')
-    .form-group
-      label(for='rank') Rank
-      input#rank.form-control(type='text', placeholder='Rank', name='rank')
-    button.btn.btn-default(type='submit') Submit
+	h1 Add
+	p.lead I like to add
+	form(action='/firefighter/addPost', method='POST')
+		.form-group
+			label(for='name') Name
+				input#name.form-control(type='text', placeholder='Name', name='name')
+		.form-group
+			label(for='number') Number
+				input#number.form-control(type='text', placeholder='number', name='number')
+		.form-group
+			label(for='rank') Rank
+				select#rank.form-control(name='rank')
+					option Level 1
+					option Qualified Fire Fighter
+					option Senior Fire Fighter
+					option Senior Fire Fighter 15
+					option Leading Fire Fighter
+		fieldset.form-group
+			legend Tick all that apply
+			.form-check
+				label.form-check-label
+					input#mdChkBox.form-check-input(type='checkbox', name='md')
+					| Motor Driver
+			.form-check
+				label.form-check-label
+					input#rescueChkBox.form-check-input(type='checkbox', name='rescue')
+					| Rescue
+			.form-check
+				label.form-check-label
+					input#aerialChkBox.form-check-input(type='checkbox', name='aerial')
+					| Aerial
+		.row
+			.col-sm-4.form-group
+				label(for='flyer1count') Flyer 1 count
+					input#flyer1count.form-control(type='text', name='flyer1count')
+			.col-sm-4.form-group
+				label(for='flyer2count') Flyer 2 count
+					input#flyer2count.form-control(type='text', name='flyer2count')
+			.col-sm-4.form-group
+				label(for='flyer3count') Flyer 3 count
+					input#flyer3count.form-control(type='text', name='flyer3count')
+		button.btn.btn-default(type='submit') Submit
