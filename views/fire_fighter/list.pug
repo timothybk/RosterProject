@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+	h1 Fire Fighter List
+	.list-group
+		each val in fire_fighter
+			- var link = "/firefighter/scorecard/" + val.number
+			a(href=link).list-group-item.list-group-item-action #{val.number} #{val.rank} #{val.name}
