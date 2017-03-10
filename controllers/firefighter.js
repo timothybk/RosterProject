@@ -7,19 +7,7 @@ const FireFighter = require('../models/FireFighter.js');
  */
 exports.scorecard = (req, res, next) => {
     console.log(req.params.ffid);
-
-    // const fire_fighter = new FireFighter({
-    //   number: 123,
-    //   rank: 'Ball fighter'
-    // });
-    // fire_fighter.save((err) => {
-    //   if (err) {
-    //     console.log('balls error');
-    //     return next(err);
-    //   }
-
-    // });
-
+   
     FireFighter.findOne({ number: req.params.ffid }, (err, fire_fighter) => {
         if (err) {
             console.log(err);
@@ -132,6 +120,11 @@ exports.addPost = (req, res, next) => {
 
 
 };
+
+/**
+ *GET /
+ *list
+ */
 
 exports.list = (req, res, next) => {
     FireFighter.find({}, "number rank name", function(err, fire_fighter) {
