@@ -7,7 +7,7 @@ const FireFighter = require('../models/FireFighter.js');
  */
 exports.scorecard = (req, res, next) => {
     console.log(req.params.ffid);
-   
+
     FireFighter.findOne({ number: req.params.ffid }, (err, fire_fighter) => {
         if (err) {
             console.log(err);
@@ -134,10 +134,49 @@ exports.list = (req, res, next) => {
         }
         if (fire_fighter) {
             res.render('fire_fighter/list', {
-              title: "firefighter list",
-              fire_fighter: fire_fighter
+                title: "firefighter list",
+                fire_fighter: fire_fighter
             });
         } else {}
 
+    })
+};
+
+exports.think = (req, res, next) => {
+    FireFighter.findOne({ number: req.params.ffid }, function(err, fire_fighter) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+        if (fire_fighter) {
+            FireFighter.aggregate([
+            {
+                $match: {
+                    driverCounts.flyerTwoCount: {$ne: null}
+                }
+                $group: {}
+            }])
+
+            }
+
+            for (var i in fire_fighter.genDutyCounts) {
+                fire_list.push([i, fire_fighterObject.genDutyCounts[i]])
+            }
+            for (var i in fire_fighterObject.driverCounts) {
+                if (fire_fighterObject.driverCounts[i] != null) {
+                    fire_list.push([i, fire_fighterObject.driverCounts[i]])
+                }
+            }
+            for (var i in fire_fighterObject.rescueCounts) {
+                if (fire_fighterObject.rescueCounts[i] != null) {
+                    fire_list.push([i, fire_fighterObject.rescueCounts[i]])
+                }
+            }
+            for (var i in fire_fighterObject.brontoCounts) {
+                if (fire_fighterObject.brontoCounts[i] != null) {
+                    fire_list.push([i, fire_fighterObject.brontoCounts[i]])
+                }
+            }
+        }
     })
 }
