@@ -81,31 +81,75 @@ exports.addPost = (req, res, next) => {
         md: req.body.md,
         rescue: req.body.rescue,
         aerial: req.body.aerial,
-        genDutyCounts: {
-            flyerOneCount: req.body.flyerOneCount,
-            flyerTwoCount: req.body.flyerTwoCount,
-            flyerThreeCount: req.body.flyerThreeCount,
-            runnerOneCount: req.body.runnerOneCount,
-            runnerTwoCount: req.body.runnerTwoCount,
-            runnerThreeCount: req.body.runnerThreeCount,
-            rescuePumpThreeCount: req.body.rescuePumpThreeCount,
-            spareCount: req.body.spareCount
-        },
-        driverCounts: {
-            flyerDriverCount: req.body.flyerDriverCount,
-            runnerDriverCount: req.body.runnerDriverCount,
-            rescuePumpDriverCount: req.body.rescuePumpDriverCount
-        },
-        rescueCounts: {
-            rescuePumpOneCount: req.body.rescuePumpOneCount,
-            rescuePumpTwoCount: req.body.rescuePumpTwoCount,
-            salvageDriverCount: req.body.salvageDriverCount,
-            salvageOffsiderCount: req.body.salvageOffsiderCount
-        },
-        brontoCounts: {
-            brontoDriverCount: req.body.brontoDriverCount,
-            brontoOffsiderCount: req.body.brontoOffsiderCount
-        }
+        counts: [{
+            pump: "flyer",
+            seat: "driver",
+            count: req.body.flyerDriverCount
+        }, {
+            pump: "flyer",
+            seat: "one",
+            count: req.body.flyerOneCount
+        }, {
+            pump: "flyer",
+            seat: "two",
+            count: req.body.flyerTwoCount
+        }, {
+            pump: "flyer",
+            seat: "three",
+            count: req.body.flyerOneCount
+        }, {
+            pump: "runner",
+            seat: "driver",
+            count: req.body.runnerDriverCount
+        }, {
+            pump: "runner",
+            seat: "one",
+            count: req.body.runnerOneCount
+        }, {
+            pump: "runner",
+            seat: "two",
+            count: req.body.runnerTwoCount
+        }, {
+            pump: "runner",
+            seat: "three",
+            count: req.body.runnerThreeCount
+        }, {
+            pump: "rp1",
+            seat: "driver",
+            count: req.body.rescuePumpDriverCount
+        }, {
+            pump: "rp1",
+            seat: "one",
+            count: req.body.rescuePumpOneCount
+        }, {
+            pump: "rp1",
+            seat: "two",
+            count: req.body.rescuePumpTwoCount
+        }, {
+            pump: "rp1",
+            seat: "three",
+            count: req.body.rescuePumpThreeCount
+        }, {
+            pump: "salvage",
+            seat: "driver",
+            count: req.body.salvageDriverCount
+        }, {
+            pump: "salvage",
+            seat: "offsider",
+            count: req.body.salvageOffsiderCount
+        }, {
+            pump: "bronto",
+            seat: "driver",
+            count: req.body.brontoDriverCount
+        }, {
+            pump: "bronto",
+            seat: "offsider",
+            count: req.body.brontoOffsiderCount
+        }, {
+            pump: "spare",
+            seat: "spare",
+            count: req.body.spareCount
+        }]
     });
     fire_fighter.save((err) => {
         if (err) {
@@ -142,41 +186,40 @@ exports.list = (req, res, next) => {
     })
 };
 
-exports.think = (req, res, next) => {
-    FireFighter.findOne({ number: req.params.ffid }, function(err, fire_fighter) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-        if (fire_fighter) {
-            FireFighter.aggregate([
-            {
-                $match: {
-                    driverCounts.flyerTwoCount: {$ne: null}
-                }
-                $group: {}
-            }])
+// exports.think = (req, res, next) => {
+//     FireFighter.findOne({ number: req.params.ffid }, function(err, fire_fighter) {
+//             if (err) {
+//                 console.log(err);
+//                 return next(err);
+//             }
+//             if (fire_fighter) {
+//                 FireFighter.aggregate([{
+//                     $match: {
+//                         driverCounts.flyerTwoCount: { $ne: null }
+//                     }
+//                     $group: {}
+//                 }])
 
-            }
+//             }
 
-            for (var i in fire_fighter.genDutyCounts) {
-                fire_list.push([i, fire_fighterObject.genDutyCounts[i]])
-            }
-            for (var i in fire_fighterObject.driverCounts) {
-                if (fire_fighterObject.driverCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.driverCounts[i]])
-                }
-            }
-            for (var i in fire_fighterObject.rescueCounts) {
-                if (fire_fighterObject.rescueCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.rescueCounts[i]])
-                }
-            }
-            for (var i in fire_fighterObject.brontoCounts) {
-                if (fire_fighterObject.brontoCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.brontoCounts[i]])
-                }
-            }
-        }
-    })
-}
+//             for (var i in fire_fighter.genDutyCounts) {
+//                 fire_list.push([i, fire_fighterObject.genDutyCounts[i]])
+//             }
+//             for (var i in fire_fighterObject.driverCounts) {
+//                 if (fire_fighterObject.driverCounts[i] != null) {
+//                     fire_list.push([i, fire_fighterObject.driverCounts[i]])
+//                 }
+//             }
+//             for (var i in fire_fighterObject.rescueCounts) {
+//                 if (fire_fighterObject.rescueCounts[i] != null) {
+//                     fire_list.push([i, fire_fighterObject.rescueCounts[i]])
+//                 }
+//             }
+//             for (var i in fire_fighterObject.brontoCounts) {
+//                 if (fire_fighterObject.brontoCounts[i] != null) {
+//                     fire_list.push([i, fire_fighterObject.brontoCounts[i]])
+//                 }
+//             }
+//         }
+//     })
+// }
