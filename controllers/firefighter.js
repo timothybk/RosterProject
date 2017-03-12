@@ -186,40 +186,23 @@ exports.list = (req, res, next) => {
     })
 };
 
-// exports.think = (req, res, next) => {
-//     FireFighter.findOne({ number: req.params.ffid }, function(err, fire_fighter) {
-//             if (err) {
-//                 console.log(err);
-//                 return next(err);
-//             }
-//             if (fire_fighter) {
-//                 FireFighter.aggregate([{
-//                     $match: {
-//                         driverCounts.flyerTwoCount: { $ne: null }
-//                     }
-//                     $group: {}
-//                 }])
-
-//             }
-
-//             for (var i in fire_fighter.genDutyCounts) {
-//                 fire_list.push([i, fire_fighterObject.genDutyCounts[i]])
-//             }
-//             for (var i in fire_fighterObject.driverCounts) {
-//                 if (fire_fighterObject.driverCounts[i] != null) {
-//                     fire_list.push([i, fire_fighterObject.driverCounts[i]])
-//                 }
-//             }
-//             for (var i in fire_fighterObject.rescueCounts) {
-//                 if (fire_fighterObject.rescueCounts[i] != null) {
-//                     fire_list.push([i, fire_fighterObject.rescueCounts[i]])
-//                 }
-//             }
-//             for (var i in fire_fighterObject.brontoCounts) {
-//                 if (fire_fighterObject.brontoCounts[i] != null) {
-//                     fire_list.push([i, fire_fighterObject.brontoCounts[i]])
-//                 }
-//             }
-//         }
-//     })
-// }
+exports.think = (req, res, next) =>{
+	FireFighter.aggregate([
+		{
+			{$unwind:{"$counts"}},
+			{$group:{_id:{"$number"}}, {total:{$sum:{"$counts.count"}}}},
+		
+	
+		}], function (err, result){
+			if (err){
+				return next(err)
+			}
+			if(result){
+				const resultObject = result.toObject();
+				for(key in resultObject){
+					console.log(resultObject[key])
+				}
+			}
+		}
+	}
+}
