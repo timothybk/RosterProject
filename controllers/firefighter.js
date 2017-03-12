@@ -190,10 +190,10 @@ exports.think = (req, res, next) =>{
 	FireFighter.aggregate([
 		{
 			{$unwind:{"$counts"}},
-			{$group:{_id:{"$number"}}, {total:{$sum:{"$counts.count"}}}},
+			{$group:{_id:{"$number"}}, {total:{$sum:{"$counts.count"}}}},	
+		}
 		
-	
-		}], function (err, result){
+		], function (err, result){
 			if (err){
 				return next(err)
 			}
@@ -202,6 +202,22 @@ exports.think = (req, res, next) =>{
 				for(key in resultObject){
 					console.log(resultObject[key])
 				}
+			}
+		})
+	FireFighter.aggregate().match({
+		'number':9204
+	}).unwind({
+		'$counts'
+	}).group({
+		_id: '$counts.pump', seatcount: {'$counts.seat':'$counts.count'}
+	}).exec(function(err, seat_count){
+		if (err){
+			return next(err)
+		}
+		if(seat_count){
+			const seat_count_object = seat_count.toObject();
+			for (key in seat_count_object){
+				console.log(seat_count_object[key]);
 			}
 		}
 	}
