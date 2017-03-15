@@ -186,39 +186,34 @@ exports.list = (req, res, next) => {
     })
 };
 
-exports.think = (req, res, next) =>{
-	FireFighter.aggregate([
-		{
-			{$unwind:{"$counts"}},
-			{$group:{_id:{"$number"}}, {total:{$sum:{"$counts.count"}}}},	
-		}
-		
-		], function (err, result){
-			if (err){
-				return next(err)
-			}
-			if(result){
-				const resultObject = result.toObject();
-				for(key in resultObject){
-					console.log(resultObject[key])
-				}
-			}
-		})
-	FireFighter.aggregate().match({
-		'number':9204
-	}).unwind({
-		'$counts'
-	}).group({
-		_id: '$counts.pump', seatcount: {'$counts.seat':'$counts.count'}
-	}).exec(function(err, seat_count){
-		if (err){
-			return next(err)
-		}
-		if(seat_count){
-			const seat_count_object = seat_count.toObject();
-			for (key in seat_count_object){
-				console.log(seat_count_object[key]);
-			}
-		}
-	}
+exports.think = (req, res, next) => {
+    FireFighter.aggregate()
+        .unwind("$counts")
+        .group({ _id: "$number", total: { $sum: "$counts.count" } })
+        .exec(function(err, result) {
+            if (err) {
+                console.log(err)
+            }
+            if (result) {
+                res.send(result);
+            }
+        })
+
+    FireFighter.aggregate()
+        .match({ 'aerial': true })
+        .unwind('$counts')
+        .group({ _id: "$name", seats: { $push: "$counts.seat" }, seat_counts: { $push: "$counts.count" } })
+        .exec(function(err, seat_count) {
+            if (err) {
+                return next(err)
+            }
+            if (seat_count) {
+                for (key in seat_count) {
+                    for (i in key) {
+                        console.log(seat_count[key].seats[5] + ":" + seat_count[key].seat_counts[5]);
+                    }
+
+                }
+            }
+        })
 }
