@@ -116,10 +116,11 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
+app.get('/', fireFighterController.list);//homeController.index);
 app.get('/firefighter/scorecard/:ffid', fireFighterController.scorecard);
 app.get('/firefighter/add', fireFighterController.add);
 app.get('/firefighter/list', fireFighterController.list);
+app.get('/firefighter/think', fireFighterController.think);
 app.post('/firefighter/addPost', fireFighterController.addPost);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);

@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  h1 #{fire_fighter.name}
+  p.lead #{fire_fighter.number}, #{fire_fighter.rank} #{genDutyCounts}
+
+  if fire_fighter
+    .list-group
+      each val in fire_list
+        - var res = val.toString().split(",")
+        - var indexString = res[0].charAt(0).toUpperCase() + res[0].slice(1)
+        - var splitname = indexString.split(/(?=[A-Z])/)
+        if splitname.length == 4
+          a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} #{splitname[2]} : #{res[1]}
+        else
+          a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{res[1]}
+  else
+    h2 ah ma gad
