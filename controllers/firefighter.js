@@ -7,52 +7,100 @@ const FireFighter = require('../models/FireFighter.js');
  */
 exports.scorecard = (req, res, next) => {
     console.log(req.params.ffid);
-
-    FireFighter.findOne({ number: req.params.ffid }, (err, fire_fighter) => {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-        if (fire_fighter) {
-            const fire_fighterObject = fire_fighter.toObject();
-            const fire_list = [];
-            for (var i in fire_fighterObject.genDutyCounts) {
-                fire_list.push([i, fire_fighterObject.genDutyCounts[i]])
+    const ffid = parseInt(req.params.ffid);
+    FireFighter.aggregate()
+        .match({ number: ffid })
+        .unwind('$counts')
+        .group({ _id: { pump: "$counts.pump", seat: "$counts.seat" }, total: { $sum: '$counts.count' } })
+        .group({ _id: { pump: "$_id.pump" }, seats: { $addToSet: { seat: "$_id.seat", total: "$total" } } })
+        .unwind("$seats")
+        .sort({ _id: -1, seats: 1 })
+        .group({ _id: { pump: "$_id.pump" }, seats: { $push: "$seats" } })
+        .exec(function(err, ffid_seat) {
+            if (err) {
+                return next(err)
             }
-            for (var i in fire_fighterObject.driverCounts) {
-                if (fire_fighterObject.driverCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.driverCounts[i]])
+            if (ffid_seat) {
+                console.log(ffid_seat)
+
+                function render(ffid_total, all_seat, all_total, ffid_object) {
+                    res.render('fire_fighter/scorecard', {
+                        title: "firefighter scorecard",
+                        ffid_total: ffid_total,
+                        ffid_seat: ffid_seat,
+                        all_seat: all_seat,
+                        all_total: all_total,
+                        ffid_object: ffid_object
+                    });
                 }
-            }
-            for (var i in fire_fighterObject.rescueCounts) {
-                if (fire_fighterObject.rescueCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.rescueCounts[i]])
-                }
-            }
-            for (var i in fire_fighterObject.brontoCounts) {
-                if (fire_fighterObject.brontoCounts[i] != null) {
-                    fire_list.push([i, fire_fighterObject.brontoCounts[i]])
-                }
+
+
             }
 
-            fire_list.sort(function(a, b) {
-                return a[1] - b[1]
-            });
+            FireFighter.aggregate()
+                .match({ number: ffid })
+                .unwind('$counts')
+                .group({ _id: null, total: { $sum: "$counts.count" }, avg: { $avg: "$counts.count" } })
+                .exec(function(err, ffid_total_count) {
+                    if (err) {
+                        return next(err)
+                    }
+                    if (ffid_total_count) {
+                        var ffid_total = ffid_total_count[0]
 
-            console.log(fire_list)
-            res.render('fire_fighter/scorecard', {
-                title: 'Scorecard of amazing',
-                fire_fighter: fire_fighterObject,
-                fire_list: fire_list
-            });
-        } else {
-            res.render('fire_fighter/scorecard', {
-                title: 'Scorecard of shit'
-            });
-        }
-    });
+                        FireFighter.aggregate()
+                            .unwind('$counts')
+                            .group({ _id: { pump: "$counts.pump", seat: "$counts.seat" }, total: { $sum: '$counts.count' } })
+                            .group({ _id: { pump: "$_id.pump" }, seats: { $addToSet: { seat: "$_id.seat", total: "$total" } } })
+                            .unwind("$seats")
+                            .sort({ _id: -1, seats: 1 })
+                            .group({ _id: { pump: "$_id.pump" }, seats: { $push: "$seats" } })
+                            .exec(function(err, all_seat_count) {
+                                if (err) {
+                                    return next(err)
+                                }
+                                if (all_seat_count) {
+                                    var all_seat = all_seat_count
+                                }
+
+                                FireFighter.aggregate()
+                                    .unwind('$counts')
+                                    .group({ _id: null, total: { $sum: "$counts.count" }, avg: { $avg: "$counts.count" } })
+                                    .exec(function(err, all_total_count) {
+                                        if (err) {
+                                            return next(err)
+                                        }
+                                        if (all_total_count) {
+                                            var all_total = all_total_count[0]
+
+                                            FireFighter
+                                                .find({})
+                                                .where('number').equals(req.params.ffid)
+                                                .lean()
+                                                .exec(function(err, ffid_full) {
+                                                    if (err) {
+                                                        return next(err)
+                                                    }
+                                                    if (ffid_full) {
+                                                        var ffid_object = ffid_full[0];
+                                                        render(ffid_total, all_seat, all_total, ffid_object);
+                                                    }
+                                                })
+
+                                            
+                                        }
+                                    })
 
 
+
+                            })
+
+                    }
+                })
+
+
+
+        })
 };
 
 /**
@@ -188,32 +236,46 @@ exports.list = (req, res, next) => {
 
 exports.think = (req, res, next) => {
     FireFighter.aggregate()
-        .unwind("$counts")
-        .group({ _id: "$number", total: { $sum: "$counts.count" } })
-        .exec(function(err, result) {
-            if (err) {
-                console.log(err)
-            }
-            if (result) {
-                res.send(result);
-            }
-        })
-
-    FireFighter.aggregate()
-        .match({ 'aerial': true })
         .unwind('$counts')
-        .group({ _id: "$name", seats: { $push: "$counts.seat" }, seat_counts: { $push: "$counts.count" } })
+        .group({ _id: { pump: "$counts.pump", seat: "$counts.seat" }, total: { $sum: '$counts.count' } })
+        .group({ _id: { pump: "$_id.pump" }, seats: { $addToSet: { seat: "$_id.seat", total: "$total" } } })
+        .unwind("$seats")
+        .sort({ _id: -1, seats: 1 })
+        .group({ _id: { pump: "$_id.pump" }, seats: { $push: "$seats" } })
         .exec(function(err, seat_count) {
             if (err) {
                 return next(err)
             }
             if (seat_count) {
-                for (key in seat_count) {
-                    for (i in key) {
-                        console.log(seat_count[key].seats[5] + ":" + seat_count[key].seat_counts[5]);
-                    }
+                console.log(seat_count)
 
+                function render(count_total) {
+                    res.render('fire_fighter/think', {
+                        title: "firefighter think",
+                        count_total: count_total,
+                        seat_count: seat_count
+
+                    });
                 }
+
+
             }
+
+            FireFighter.aggregate()
+                .unwind('$counts')
+                .group({ _id: null, total: { $sum: "$counts.count" }, avg: { $avg: "$counts.count" } })
+                .exec(function(err, total_count) {
+                    if (err) {
+                        return next(err)
+                    }
+                    if (total_count) {
+                        var count_total = total_count[0].total
+                        render(count_total);
+                    }
+                })
+
+
+
         })
+
 }

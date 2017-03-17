@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+	h1 thinking
+	h3 thinking
+	each val, index in seat_count
+		p.lead #{seat_count[index]._id.pump}
+		.list-group
+			each one, key in seat_count[index].seats
+				-var fraction = seat_count[index].seats[key].total / count_total;
+				-var percentage = fraction *100;
+				-var rounded = Math.round(percentage)			
+				a(href="#").list-group-item.list-group-item-action #{seat_count[index].seats[key].seat} #{rounded}

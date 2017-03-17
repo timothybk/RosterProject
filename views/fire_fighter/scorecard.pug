@@ -1,18 +1,18 @@
 extends ../layout
 
 block content
-  h1 #{fire_fighter.name}
-  p.lead #{fire_fighter.number}, #{fire_fighter.rank} #{genDutyCounts}
-
-  if fire_fighter
-    .list-group
-      each val in fire_list
-        - var res = val.toString().split(",")
-        - var indexString = res[0].charAt(0).toUpperCase() + res[0].slice(1)
-        - var splitname = indexString.split(/(?=[A-Z])/)
-        if splitname.length == 4
-          a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} #{splitname[2]} : #{res[1]}
-        else
-          a(href="#").list-group-item.list-group-item-action #{splitname[0]} #{splitname[1]} : #{res[1]}
-  else
-    h2 ah ma gad
+	-var ffid_avg_round = Math.round(ffid_total.avg)
+	h1 #{ffid_object.name}
+	h3 #{ffid_object.number}, #{ffid_object.rank}
+	h5 This fire fighter avg per seat: #{ffid_avg_round}
+	each val, index in ffid_seat
+			p.lead #{ffid_seat[index]._id.pump.toUpperCase()}
+			.list-group
+				each one, key in ffid_seat[index].seats
+					-var fraction = ffid_seat[index].seats[key].total / ffid_total.total;
+					-var percentage = fraction *100;
+					-var rounded = Math.round(percentage)
+					-var all_fraction = all_seat[index].seats[key].total / all_total.total;
+					-var all_percentage = all_fraction * 100;
+					-var all_rounded = Math.round(all_percentage);
+					a(href="#" class= (ffid_seat[index].seats[key].total === null ? "disabled" : undefined)).list-group-item.list-group-item-action #{ffid_seat[index].seats[key].seat} #{rounded} Accross shift: #{all_rounded} 
